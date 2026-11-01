@@ -1,24 +1,29 @@
 # 06. 개발 규칙
 
-## 폴더 구조 (기능별)
+## 폴더 구조 (2026-11-01 변경: 컴포넌트는 components/ 아래 영역별)
 ```
 src/
   app/                 # 라우트 (page, layout, api/places/route.ts 등)
-  features/
-    map/               # 지도 기능 전용 컴포넌트·훅·유틸
-    forecast/          # 예측 차트 기능 전용 컴포넌트·훅·유틸
   components/
-    ui/                # shadcn/ui 컴포넌트 (CLI가 생성)
+    ui/                # shadcn이 넣은 파일(button.tsx, badge.tsx…) + 두 영역 이상에서 쓰는 우리 부품
+    map/               # 지도 SVG와 지도 위 부품 (seoul-map, district-layer, legend, zoom-controls…)
+    panel/             # 웹 패널·모바일 시트 안 내용 (top5-list, place-list, forecast-card…)
+    mobile/            # 모바일 전용 틀 (bottom-sheet, sheet-header, sheet-min-line…)
+  hooks/               # React 훅 (지도 확대, 주소 상태 등)
   lib/                 # UI 없는 공통 로직
     congestion.ts      # 혼잡도 단계 ↔ 숫자, 구 평균 계산 등
     seoul-api/         # 서울시 API 호출·어댑터 ('server-only')
     utils.ts           # shadcn의 cn() 등
-  hooks/               # 여러 기능이 같이 쓰는 훅이 생기면 그때 만든다
 scripts/               # 빌드용 스크립트 (05 문서)
 data/raw/              # 원본 데이터 (05 문서). 34MB 경계 geojson은 .gitignore
 docs/design/           # 확정 화면 도안 PNG·HTML (구현 참고용)
 ```
-- 한 기능에서만 쓰는 것은 그 기능 폴더 안에 둔다. 두 기능 이상이 쓰게 되면 `lib/`(로직) 또는 `components/`(UI)로 올린다.
+- **파일 이름은 전부 kebab-case** (`top5-list.tsx`), 컴포넌트 이름은 PascalCase(`Top5List`). 맥은 대소문자를 구분하지 않지만 Vercel(리눅스)은 구분해서, 대소문자가 섞이면 배포 때만 import 오류가 날 수 있다.
+- **shadcn 파일은 이름·위치를 바꾸지 않는다.** shadcn 파일끼리 `@/components/ui/toggle`처럼 경로로 서로 import하고, CLI가 파일 이름으로 "이미 있는지"를 판단하기 때문. 내용(스타일)은 고쳐도 된다. 고친 파일에 `shadcn add`가 덮어쓸지 물으면 "아니요".
+- **모양만 다른 부품은 새 파일을 만들지 않고 shadcn 파일 안에 variant를 추가한다.** 혼잡도 뱃지 = `badge.tsx`에 `free / normal / busyish / busy / none` variant(`<Badge variant="busy">`), 정렬 탭(북적 · 한적) = `toggle-group.tsx`에 `underline` variant. 파일 맨 위에 "혼잡도 뱃지도 이 파일의 variant로 씀" 같은 주석을 단다. 단계 → 글자 변환("약간 붐빔")은 `lib/congestion.ts`.
+- 동작이나 여러 부품 조합이 들어가는 것(ForecastCard, Top5List…)만 새 파일로 만든다.
+- **처음엔 쓰는 영역 폴더(`map/`, `panel/`, `mobile/`)에 만들고, 두 번째 영역에서 쓰게 되면 `ui/`로 옮긴다.** 예: 장소 목록 줄은 패널에서만 쓰니 `panel/place-list-item.tsx`, 나중에 지도 툴팁에서도 쓰게 되면 `ui/`로. 그래서 `ui/`는 "shadcn 원본 + 여러 곳에서 쓰는 것"만 남는다.
+- 부품은 미리 만들지 않고 **필요해질 때** 만든다. shadcn 부품도 쓸 때 `pnpm dlx shadcn add 이름`으로 하나씩 추가한다.
 - `lib/`는 되도록 React에 의존하지 않는 함수로 둔다. 테스트와 재사용이 쉽다.
 
 ## 코드 스타일

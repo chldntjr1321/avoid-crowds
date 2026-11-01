@@ -25,7 +25,7 @@
 | 파일 | 내용 |
 | --- | --- |
 | `DS-1-foundations` | 색(primitive → semantic), 글자, 모서리, 그림자, 간격, 움직임, Tailwind에 넣는 법 |
-| `DS-2-primitives` | 작은 부품: Button, IconButton, SegmentedControl(북적 · 한적), CongestionBadge, Eyebrow, Skeleton, LegendSwatch, Notice, Breadcrumb, MapHint, Divider, Readout, 지도 도형 |
+| `DS-2-primitives` | 작은 부품: Button, IconButton, ToggleGroup underline(북적 · 한적), Badge 혼잡도 variant, Eyebrow, Skeleton, LegendSwatch, Notice, Breadcrumb, MapHint, Divider, Readout, 지도 도형 |
 | `DS-3-composites` | 조합 부품(웹 + 모바일)과 **화면별 사용 부품 표** |
 | `sort-options-discussion` | 정렬 버튼 시안 비교 기록(최종은 E안 모양 + "북적 · 한적" 문구) |
 | `../tokens.md` | 토큰 전체 목록과 `globals.css`에 붙여 넣을 코드 |

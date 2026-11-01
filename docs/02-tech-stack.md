@@ -40,7 +40,8 @@ pnpm create next-app@latest . --ts --tailwind --eslint --app --src-dir --import-
 | shadcn 변수 | `shadcn init`이 만든 변수(`--background`, `--foreground`, `--card`, `--muted`, `--accent`, `--border`, `--input`, `--ring`, `--destructive`, `--primary`…)는 **이름은 그대로, 값만** 우리 primitive로 | shadcn 컴포넌트를 고치지 않고도 우리 색이 입혀짐. 주의: shadcn의 `--accent`는 hover 바탕(회색)이라 주황 강조는 `--brand`로 따로 둠 |
 | 모서리 | `--radius: 6px` → sm 2px(버튼·뱃지) · md 4px(범례) · lg 6px(패널·카드) | 도면풍이라 각진 느낌 유지 |
 | Tailwind 연결 | `:root`에 primitive·semantic, `@theme inline`에 `--color-*: var(--*)` | `bg-congestion-busy` 같은 클래스를 바로 씀 (`tokens.md`의 코드 그대로) |
-| 컴포넌트 | Primitive(작은 부품)는 `src/components/ui/`(shadcn), 조합 부품은 `src/features/*` | 목록과 화면별 사용표는 `docs/design/system/DS-2`, `DS-3` |
-| 정렬 | shadcn ToggleGroup(type="single")을 글자 탭 모양으로 꾸밈 ("북적 · 한적") | 키보드·스크린리더 처리가 기본 제공 |
+| 컴포넌트 | Primitive(작은 부품)는 `src/components/ui/`(shadcn 파일 + 우리 작은 부품), 조합 부품은 `src/components/{map,panel,mobile}/`. 파일 이름 kebab-case | 목록과 화면별 사용표는 `docs/design/system/DS-2`, `DS-3`. 폴더 규칙은 `06` 문서 |
+| 정렬 | shadcn ToggleGroup(type="single")에 `underline` variant 추가 ("북적 · 한적") | 키보드·스크린리더 처리가 기본 제공 |
+| 혼잡도 뱃지 | shadcn Badge에 `free / normal / busyish / busy / none` variant 추가 (별도 파일 없음) | 색만 다르고 동작이 없어서 파일을 늘릴 이유가 없음 |
 | 모바일 바텀시트 | shadcn Drawer(vaul) `snapPoints` 3단 | 끌어서 멈추는 높이를 직접 구현하지 않아도 됨 |
 | 휠 확대 (MVP 이후) | d3-zoom | 휠·핀치·드래그·배율 제한을 한 번에. 클릭과 드래그 구분(5px) |
