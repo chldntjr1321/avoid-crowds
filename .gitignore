@@ -39,3 +39,16 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude Code 개인 설정 (팀 공용 .claude/settings.json은 올려도 됨)
+.claude/settings.local.json
+CLAUDE.local.md
+
+# 로그: 서울시 API는 인증키가 주소 안에 들어가서 로그에 키가 찍힐 수 있음
+*.log
+
+# 지도 변환 스크립트의 중간 결과물
+/data/tmp/
+
+# 행정동 경계 원본 (34MB, 내려받는 주소는 README·docs/05)
+/data/raw/HangJeongDong_*.geojson
