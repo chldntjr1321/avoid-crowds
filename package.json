@@ -2,11 +2,13 @@
   "name": "avoid-crowds",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "build:map": "node scripts/build-map-data.ts"
   },
   "dependencies": {
     "next": "16.4.3",
@@ -15,12 +17,15 @@
   },
   "devDependencies": {
     "@tailwindcss/turbopack": "^4",
+    "@types/d3-geo": "^3.1.1",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "d3-geo": "^3.1.1",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
     "eslint-config-prettier": "^10.1.8",
+    "mapshaper": "^0.7.101",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "tailwindcss": "^4",
