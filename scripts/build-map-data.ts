@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import mapshaper from 'mapshaper';
 import { geoMercator, geoPath } from 'd3-geo';
 import type {
@@ -37,8 +37,12 @@ const districts = guGeoJson.features.map((f) => {
   if (d === null) {
     throw new Error(`${f.properties.sggnm}의 svg path가 null입니다.`);
   }
-  return { name: f.properties.sggnm, d };
+  return { name: f.properties.sggnm, d, bbox: toPath.bounds(f) };
 });
+
+// 앱이 실제로 import해서 쓰는 결과물. 원본은 배포 서버에 없으니 이 파일을 커밋한다
+mkdirSync('src/data/generated', { recursive: true });
+writeFileSync('src/data/generated/districts.json', JSON.stringify(districts));
 
 // 디버깅용
 console.log(`서울 동: ${seoulDongs.length}`);
@@ -51,3 +55,5 @@ console.log('첫 번째 구:', guGeoJson.features[0].properties);
 
 console.log('투영 배율:', projection.scale());
 console.log(districts[0].name, districts[0].d.slice(0, 80));
+
+console.log(districts[0].name, districts[0].bbox);
