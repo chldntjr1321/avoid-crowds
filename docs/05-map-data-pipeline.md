@@ -14,7 +14,7 @@ SVG로 지도를 그리려면 브라우저에 `<path d="M10 20 L30 40 …">` 같
 
 ## 파일 위치 (2026-11-01 확정)
 - `data/raw/`: 받은 원본. 출처·받은 날짜는 `data/raw/README.md`에 적는다.
-  - `places-121-area.zip`, `places-121-list.xlsx`: 서울 열린데이터광장 (사용자가 받음, 작아서 **커밋**)
+  - `places-121-area/`(shapefile 5개, 압축 푼 폴더), `places-121-list.xlsx`: 서울 열린데이터광장 (사용자가 받음, 작아서 **커밋**)
   - `HangJeongDong_ver20261001.geojson`: 전국 행정동 경계 2026-10-01 기준 ([vuski/admdongkor](https://github.com/vuski/admdongkor), 통계청 SGIS 가공, CC BY 4.0). 34MB라 **커밋하지 않음**: `.gitignore`에 `data/raw/*.geojson` 추가, README에 받는 주소 `https://raw.githubusercontent.com/vuski/admdongkor/master/ver20261001/HangJeongDong_ver20261001.geojson` 기록. 서울(sido 11)은 구 경계, 경기(41)·인천(28)은 배경으로 쓴다. 동 단위라 스크립트에서 같은 구(`sggnm`)끼리 합친다
   - 앱 하단 또는 README에 출처 표기: "행정구역 경계: 통계청 SGIS, vuski/admdongkor (CC BY 4.0)"
 - `scripts/build-map-data.ts`: 변환 스크립트. 데이터 작업 때 만든다. `package.json`에 `"build:map"`으로 등록해 `pnpm build:map`으로 실행. d3-geo·mapshaper는 `pnpm add -D`(개발용).
