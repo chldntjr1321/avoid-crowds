@@ -1,4 +1,5 @@
 import districts from '@/data/generated/districts.json';
+import background from '@/data/generated/background.json';
 
 export default function Home() {
   return (
@@ -12,6 +13,12 @@ export default function Home() {
             stroke="currentColor"
           />
         ))}
+        <path
+          d={background.river}
+          fill="none"
+          className="stroke-blue-400"
+          strokeWidth={6}
+        />
       </svg>
     </main>
   );
