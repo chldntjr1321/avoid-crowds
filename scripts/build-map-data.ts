@@ -1,4 +1,4 @@
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync, statSync } from 'node:fs';
 import mapshaper from 'mapshaper';
 import { geoMercator, geoPath } from 'd3-geo';
 import type {
@@ -57,3 +57,9 @@ console.log('투영 배율:', projection.scale());
 console.log(districts[0].name, districts[0].d.slice(0, 80));
 
 console.log(districts[0].name, districts[0].bbox);
+
+console.log(
+  'districts.json 크기:',
+  statSync('src/data/generated/districts.json').size,
+  'bytes',
+);
