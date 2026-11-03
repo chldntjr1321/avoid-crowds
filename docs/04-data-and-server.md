@@ -46,7 +46,7 @@ type CongestLevel = '여유' | '보통' | '약간 붐빔' | '붐빔';
 interface Place {
   code: string;          // AREA_CD, 예: POI009
   name: string;          // AREA_NM
-  guCode: string;        // 변환 스크립트가 정한 소속 구 (서울대공원만 '과천시')
+  guName: string;        // 변환 스크립트가 정한 소속 구 (서울대공원만 '과천시')
   level: CongestLevel;   // AREA_CONGEST_LVL
   message: string;       // AREA_CONGEST_MSG
   population: { min: number; max: number };
