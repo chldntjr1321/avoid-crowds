@@ -1,0 +1,105 @@
+{
+  "SeoulRtd.citydata_ppltn": [
+    {
+      "AREA_NM": "광화문·덕수궁",
+      "AREA_CD": "POI009",
+      "AREA_CONGEST_LVL": "약간 붐빔",
+      "AREA_CONGEST_MSG": "사람들이 몰려있을 가능성이 크고 붐빈다고 느낄 수 있어요. 인구밀도가 높은 구간에서는 도보 이동시 부딪힘이 발생할 수 있어요.",
+      "AREA_PPLTN_MIN": "54000",
+      "AREA_PPLTN_MAX": "56000",
+      "MALE_PPLTN_RATE": "49.8",
+      "FEMALE_PPLTN_RATE": "50.2",
+      "PPLTN_RATE_0": "0.2",
+      "PPLTN_RATE_10": "1.9",
+      "PPLTN_RATE_20": "14.2",
+      "PPLTN_RATE_30": "23.5",
+      "PPLTN_RATE_40": "25.4",
+      "PPLTN_RATE_50": "20.5",
+      "PPLTN_RATE_60": "9.3",
+      "PPLTN_RATE_70": "5.0",
+      "RESNT_PPLTN_RATE": "44.5",
+      "NON_RESNT_PPLTN_RATE": "55.5",
+      "REPLACE_YN": "N",
+      "PPLTN_TIME": "2026-11-03 13:55",
+      "FCST_YN": "Y",
+      "FCST_PPLTN": [
+        {
+          "FCST_TIME": "2026-11-03 15:00",
+          "FCST_CONGEST_LVL": "붐빔",
+          "FCST_PPLTN_MIN": "52000",
+          "FCST_PPLTN_MAX": "54000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 16:00",
+          "FCST_CONGEST_LVL": "붐빔",
+          "FCST_PPLTN_MIN": "50000",
+          "FCST_PPLTN_MAX": "52000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 17:00",
+          "FCST_CONGEST_LVL": "붐빔",
+          "FCST_PPLTN_MIN": "48000",
+          "FCST_PPLTN_MAX": "50000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 18:00",
+          "FCST_CONGEST_LVL": "약간 붐빔",
+          "FCST_PPLTN_MIN": "42000",
+          "FCST_PPLTN_MAX": "44000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 19:00",
+          "FCST_CONGEST_LVL": "보통",
+          "FCST_PPLTN_MIN": "32000",
+          "FCST_PPLTN_MAX": "34000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 20:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "22000",
+          "FCST_PPLTN_MAX": "24000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 21:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "16000",
+          "FCST_PPLTN_MAX": "18000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 22:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "10000",
+          "FCST_PPLTN_MAX": "12000"
+        },
+        {
+          "FCST_TIME": "2026-11-03 23:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "8000",
+          "FCST_PPLTN_MAX": "8500"
+        },
+        {
+          "FCST_TIME": "2026-11-04 00:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "5500",
+          "FCST_PPLTN_MAX": "6000"
+        },
+        {
+          "FCST_TIME": "2026-11-04 01:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "5000",
+          "FCST_PPLTN_MAX": "5500"
+        },
+        {
+          "FCST_TIME": "2026-11-04 02:00",
+          "FCST_CONGEST_LVL": "여유",
+          "FCST_PPLTN_MIN": "5000",
+          "FCST_PPLTN_MAX": "5500"
+        }
+      ]
+    }
+  ],
+  "RESULT": {
+    "RESULT.CODE": "INFO-000",
+    "RESULT.MESSAGE": "정상 처리되었습니다."
+  }
+}
