@@ -1,4 +1,5 @@
-export type CongestLevel = '여유' | '보통' | '약간 붐빔' | '붐빔';
+export const CONGEST_LEVELS = ['여유', '보통', '약간 붐빔', '붐빔'] as const;
+export type CongestLevel = (typeof CONGEST_LEVELS)[number];
 
 export interface PopulationRange {
   min: number;
