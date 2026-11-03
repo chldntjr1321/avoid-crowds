@@ -30,10 +30,17 @@ export interface SeoulPlaceRaw {
   FCST_PPLTN: SeoulForecastRaw[];
 }
 
-export interface SeoulApiResponse {
+export interface SeoulApiSuccess {
   'SeoulRtd.citydata_ppltn': SeoulPlaceRaw[];
   RESULT: {
     'RESULT.CODE': string;
     'RESULT.MESSAGE': string;
   };
 }
+
+export interface SeoulApiError {
+  'RESULT.CODE': string;
+  'RESULT.MESSAGE': string;
+}
+
+export type SeoulApiResponse = SeoulApiSuccess | SeoulApiError;
