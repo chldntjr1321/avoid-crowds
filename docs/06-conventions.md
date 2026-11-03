@@ -12,10 +12,12 @@ src/
   hooks/               # React 훅 (지도 확대, 주소 상태 등)
   lib/                 # UI 없는 공통 로직
     congestion.ts      # 혼잡도 단계 ↔ 숫자, 구 평균 계산 등
-    seoul-api/         # 서울시 API 호출·어댑터 ('server-only')
+    place.ts           # 앱 공통 타입 Place (서버·화면 같이 씀)
+    seoul-api/         # 서울시 API 타입·호출·어댑터·캐싱 (04 문서)
     utils.ts           # shadcn의 cn() 등
 scripts/               # 빌드용 스크립트 (05 문서)
 data/raw/              # 원본 데이터 (05 문서). 34MB 경계 geojson은 .gitignore
+api-samples/           # 서울시 API 실제 응답 샘플 (타입·어댑터 확인용)
 docs/design/           # 확정 화면 도안 PNG·HTML (구현 참고용)
 ```
 - **파일 이름은 전부 kebab-case** (`top5-list.tsx`), 컴포넌트 이름은 PascalCase(`Top5List`). 맥은 대소문자를 구분하지 않지만 Vercel(리눅스)은 구분해서, 대소문자가 섞이면 배포 때만 import 오류가 날 수 있다.
@@ -43,7 +45,7 @@ docs/design/           # 확정 화면 도안 PNG·HTML (구현 참고용)
 - `.env.local`에 `SEOUL_API_KEY=발급받은_인증키`
 - **`NEXT_PUBLIC_` 접두사 금지.** 붙이면 브라우저 코드에 키가 그대로 들어간다.
 - `.gitignore`의 `.env*`로 git에서 제외된다. `.env.example`은 만들지 않고, README 실행 방법에 변수 이름을 적는다.
-- Vercel에는 배포할 때 프로젝트 설정의 Environment Variables에 같은 이름으로 넣는다.
+- Vercel에는 배포할 때 프로젝트 설정의 Environment Variables에 같은 이름으로 넣는다. **빌드 때도 서울시 API를 부르므로** 빌드 환경에도 키가 있어야 한다 (04 문서).
 
 ## 브랜치·커밋
 - **main에 직접 커밋** (PR 없음, 혼자 짧게 진행하는 프로젝트)
