@@ -15,6 +15,10 @@ interface DongFeature {
 }
 
 type GuFeature = ExtendedFeature<GeoGeometryObjects, { sggnm: string }>;
+type PlaceFeature = ExtendedFeature<
+  GeoGeometryObjects,
+  { AREA_CD: string; CATEGORY: string; AREA_NM: string; sggnm: string }
+>;
 
 const SOUTH_OF_RIVER = [
   '강서구',
@@ -31,8 +35,9 @@ const SOUTH_OF_RIVER = [
 ];
 
 const raw = readFileSync('data/raw/HangJeongDong_ver20261001.geojson', 'utf8');
-const korea: { features: DongFeature[] } = JSON.parse(raw);
+const korea: { features: DongFeature[] } = JSON.parse(raw); // korea.features는 전국 동 3559개가 들어있는 배열
 
+// 서울특별시 sido 코드가 11
 const seoulDongs = korea.features.filter((f) => f.properties.sido === '11');
 const seoulGeoJson = { type: 'FeatureCollection', features: seoulDongs };
 
@@ -85,9 +90,52 @@ if (riverPath === null) {
   throw new Error('한강 path가 null입니다.');
 }
 
+// 장소 -> 구 배정용 후보: 서울 25개 구 + 과천시(서울대공원). 지도용 guGeoJson과 따로 둔다 (과천시의 sido 코드는 41)
+
+const extendedDongs = korea.features.filter(
+  (f) =>
+    f.properties.sido === '11' ||
+    (f.properties.sido === '41' && f.properties.sggnm === '과천시'),
+);
+const extendedGeoJson = {
+  type: 'FeatureCollection',
+  features: extendedDongs,
+};
+
+const extendedOutput = await mapshaper.applyCommands(
+  '-i extended.json -dissolve sggnm -o extended-gu.json',
+  { 'extended.json': extendedGeoJson },
+);
+const extendedGuGeoJson: ExtendedFeatureCollection<GuFeature> = JSON.parse(
+  extendedOutput['extended-gu.json'].toString(),
+);
+
+// 장소 121곳을 읽고, 가장 많이 겹치는 구 이름(sggnm)을 붙인다
+const placesOutput = await mapshaper.applyCommands(
+  '-i data/raw/places-121-area/places-121-area.shp -join extended-gu.json largest-overlap -o places.json gj2008',
+  { 'extended-gu.json': extendedGuGeoJson },
+);
+const placesGeoJson: ExtendedFeatureCollection<PlaceFeature> = JSON.parse(
+  placesOutput['places.json'].toString(),
+);
+
+const places = placesGeoJson.features.map((f) => {
+  const d = toPath(f);
+  if (d === null) {
+    throw new Error(`${f.properties.AREA_NM}의 svg path가 null입니다.`);
+  }
+  return {
+    name: f.properties.AREA_NM,
+    d,
+    code: f.properties.AREA_CD,
+    guName: f.properties.sggnm,
+  };
+});
+
 // 앱이 실제로 import해서 쓰는 결과물. 원본은 배포 서버에 없으니 이 파일을 커밋한다
 mkdirSync('src/data/generated', { recursive: true });
 writeFileSync('src/data/generated/districts.json', JSON.stringify(districts));
+writeFileSync('src/data/generated/places.json', JSON.stringify(places));
 writeFileSync(
   'src/data/generated/background.json',
   JSON.stringify({ river: riverPath }),
@@ -120,3 +168,17 @@ console.log(
 );
 console.log(river.type, river.geometries.length);
 console.log('한강 path:', riverPath.slice(0, 80));
+
+console.log('구 배정 후보:', extendedGuGeoJson.features.length);
+console.log('장소 수:', places.length);
+console.log(
+  '첫 번째 장소:',
+  places[0].name,
+  places[0].guName,
+  places[0].d.slice(0, 80),
+);
+console.log(
+  'places.json 크기:',
+  statSync('src/data/generated/places.json').size,
+  'bytes',
+);
