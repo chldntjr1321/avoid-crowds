@@ -42,6 +42,7 @@ const seoulDongs = korea.features.filter((f) => f.properties.sido === '11');
 const seoulGeoJson = { type: 'FeatureCollection', features: seoulDongs };
 
 // d3-geo는 시계 방향을 안쪽으로 봐서, 반시계(RFC 7946) 기본 출력 대신 gj2008로 내보낸다.
+// output에 { 'gu.json': ... } 형태로 담김. 그래서 다음에 output['gu.json']으로 접근한 것.
 const output = await mapshaper.applyCommands(
   '-i seoul.json -dissolve sggnm -o gu.json gj2008',
   { 'seoul.json': seoulGeoJson },
