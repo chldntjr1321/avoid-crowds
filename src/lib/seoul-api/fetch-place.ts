@@ -8,12 +8,19 @@ export async function fetchPlace(code: string): Promise<SeoulPlaceRaw> {
   }
 
   const url = `http://openapi.seoul.go.kr:8088/${apiKey}/json/citydata_ppltn/1/5/${code}`;
-  const res = await fetch(url);
+  let res: Response;
+
+  try {
+    res = await fetch(url);
+  } catch (error) {
+    throw new Error(`${code} 서울시 API 연결 실패`, { cause: error });
+  }
+
   if (!res.ok) {
     throw new Error(`${code}에 대한 HTTP 오류: ${res.status}`);
   }
-  const data: SeoulApiResponse = await res.json();
 
+  const data: SeoulApiResponse = await res.json();
   // API 응답 실패 시
   if (!('RESULT' in data)) {
     throw new Error(
