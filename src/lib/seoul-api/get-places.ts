@@ -3,6 +3,7 @@ import { cacheLife } from 'next/cache';
 import { toPlace } from '@/lib/seoul-api/adapter';
 import { fetchPlace } from '@/lib/seoul-api/fetch-place';
 import type { Place } from '@/lib/place';
+import placeList from '@/data/generated/places.json';
 
 export async function getPlaces(): Promise<Place[]> {
   'use cache';
@@ -11,9 +12,32 @@ export async function getPlaces(): Promise<Place[]> {
   // expire 10분: 서울시에서 보내줄 때의 지연 시간(약 30분)에 더해지는 지연을 줄이려고 짧게 잡음
   cacheLife({ revalidate: 300, expire: 600 });
 
-  // TODO: places.json으로 교체 예정. 지금은 테스트용 하드코딩
-  const raw = await fetchPlace('POI009');
-  const place = toPlace(raw, '종로구');
+  const results = await Promise.allSettled(
+    placeList.map(async (p) => {
+      const raw = await fetchPlace(p.code);
+      const place = toPlace(raw, p.guName);
 
-  return [place];
+      return place;
+    }),
+  );
+  const successResults = results
+    .filter((result) => result.status === 'fulfilled')
+    .map((r) => r.value);
+
+  const failReasons = results
+    .filter((result) => result.status === 'rejected')
+    .map((r) => r.reason);
+
+  if (failReasons.length > 0) {
+    console.error(`실패 ${failReasons.length}곳`);
+    for (const reason of failReasons) {
+      console.error(reason);
+    }
+  }
+
+  if (successResults.length === 0) {
+    throw new Error(`서울시 API: 장소 ${placeList.length}곳 모두 실패`);
+  }
+
+  return successResults;
 }
