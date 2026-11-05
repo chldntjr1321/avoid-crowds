@@ -35,5 +35,9 @@ export async function fetchPlace(code: string): Promise<SeoulPlaceRaw> {
     );
   }
 
-  return data['SeoulRtd.citydata_ppltn'][0];
+  const place = data['SeoulRtd.citydata_ppltn'][0];
+  if (!place) {
+    throw new Error(`${code} 서울시 API 오류: 장소 데이터 없음 (빈 배열)`);
+  }
+  return place;
 }
