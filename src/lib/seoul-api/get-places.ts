@@ -12,6 +12,8 @@ export async function getPlaces(): Promise<Place[]> {
   // expire 10분: 서울시에서 보내줄 때의 지연 시간(약 30분)에 더해지는 지연을 줄이려고 짧게 잡음
   cacheLife({ revalidate: 300, expire: 600 });
 
+  const start = performance.now();
+
   const results = await Promise.allSettled(
     placeList.map(async (p) => {
       const raw = await fetchPlace(p.code);
@@ -27,6 +29,12 @@ export async function getPlaces(): Promise<Place[]> {
   const failReasons = results
     .filter((result) => result.status === 'rejected')
     .map((r) => r.reason);
+
+  // 서울시 api 호출에 걸리는 시간 측정 로그
+  const ms = Math.round(performance.now() - start);
+  console.log(
+    `${placeList.length}곳 호출 ${ms}ms, 성공: ${successResults.length} 실패: ${failReasons.length}`,
+  );
 
   if (failReasons.length > 0) {
     console.error(`실패 ${failReasons.length}곳`);
