@@ -11,6 +11,7 @@
     "build:map": "node scripts/build-map-data.ts"
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.106.1",
     "class-variance-authority": "^0.7.1",
     "cn": "^0.5.2",
     "lucide-react": "^1.69.0",
