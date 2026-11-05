@@ -1,1 +1,254 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  /* 디자인이 2px / 4px / 6px라서 배수 대신 고정값 (tokens.md) */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+
+  /* 우리 semantic (tokens.md) */
+  --color-surface-white: var(--surface-white);
+  --color-text-body: var(--text-body);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-subtle: var(--text-subtle);
+  --color-text-faint: var(--text-faint);
+  --color-border-soft: var(--border-soft);
+  --color-border-dashed: var(--border-dashed);
+  --color-brand: var(--brand);
+  --color-selected: var(--selected);
+  --color-notice: var(--notice);
+  --color-notice-border: var(--notice-border);
+  --color-notice-foreground: var(--notice-foreground);
+  --color-skeleton: var(--skeleton);
+  --color-congestion-free: var(--congestion-free);
+  --color-congestion-free-hover: var(--congestion-free-hover);
+  --color-congestion-free-stroke: var(--congestion-free-stroke);
+  --color-congestion-normal: var(--congestion-normal);
+  --color-congestion-normal-hover: var(--congestion-normal-hover);
+  --color-congestion-normal-stroke: var(--congestion-normal-stroke);
+  --color-congestion-busyish: var(--congestion-busyish);
+  --color-congestion-busyish-hover: var(--congestion-busyish-hover);
+  --color-congestion-busyish-stroke: var(--congestion-busyish-stroke);
+  --color-congestion-busy: var(--congestion-busy);
+  --color-congestion-busy-hover: var(--congestion-busy-hover);
+  --color-congestion-busy-stroke: var(--congestion-busy-stroke);
+  --color-congestion-none: var(--congestion-none);
+  --color-map-outside: var(--map-outside);
+  --color-map-outside-line: var(--map-outside-line);
+  --color-map-line: var(--map-line);
+  --color-map-wall: var(--map-wall);
+  --color-map-empty: var(--map-empty);
+  --color-map-zoom-face: var(--map-zoom-face);
+  --color-map-zoom-wall: var(--map-zoom-wall);
+  --color-map-zoom-edge: var(--map-zoom-edge);
+  --color-map-river: var(--map-river);
+  --color-map-river-outside: var(--map-river-outside);
+  --color-map-river-label: var(--map-river-label);
+}
+
+:root {
+  --gray-0: #ffffff;
+  --gray-25: #fbfaf8;
+  --gray-50: #f7f6f4;
+  --gray-75: #f1eee9;
+  --gray-100: #eeebe6;
+  --gray-150: #e8e4de;
+  --gray-200: #e2ded8;
+  --gray-250: #d6d1ca;
+  --gray-300: #cdc7bf;
+  --gray-400: #b5afa7;
+  --gray-500: #a39b90;
+  --gray-600: #8a847c;
+  --gray-700: #6b655e;
+  --gray-750: #5c5751;
+  --gray-800: #3d3a36;
+  --gray-900: #1f1f1f;
+  --neutral-200: #e6e6e6;
+  --green-100: #cfe8cf;
+  --green-200: #b9deb9;
+  --green-400: #7fb27f;
+  --yellow-100: #f3eed2;
+  --yellow-200: #ede3b4;
+  --yellow-500: #c2b064;
+  --orange-50: #fbf4ea;
+  --orange-100: #ebd6be;
+  --orange-200: #f5c99b;
+  --orange-300: #f2b98a;
+  --orange-500: #e07a4f;
+  --orange-900: #7a5230;
+  --red-200: #ee9a7e;
+  --red-300: #ea8a6e;
+  --red-500: #c9573c;
+  --red-600: #b5574a;
+  --blue-50: #e4ebee;
+  --blue-100: #d6e4eb;
+  --blue-200: #cbd5da;
+  --blue-300: #a9bbc4;
+  --blue-500: #7f98a5;
+
+  /* 바탕과 면 */
+  --background: var(--gray-50);
+  --card: var(--gray-25);
+  --card-foreground: var(--gray-900);
+  --muted: var(--gray-75);
+  --accent: var(--gray-75);
+  --popover: var(--gray-25);
+  --surface-white: var(--gray-0);
+  /* 글자 */
+  --foreground: var(--gray-900);
+  --text-body: var(--gray-800);
+  --text-secondary: var(--gray-750);
+  --muted-foreground: var(--gray-700);
+  --text-subtle: var(--gray-600);
+  --text-faint: var(--gray-500);
+  /* 테두리 */
+  --border: var(--gray-200);
+  --border-soft: var(--gray-150);
+  --border-dashed: var(--gray-250);
+  --input: var(--gray-900);
+  --primary: var(--gray-900);
+  --primary-foreground: var(--gray-0);
+  /* 상태 */
+  --ring: var(--orange-500);
+  --brand: var(--orange-500);
+  --destructive: var(--red-600);
+  --selected: var(--gray-800);
+  --notice: var(--orange-50);
+  --notice-border: var(--orange-100);
+  --notice-foreground: var(--orange-900);
+  --skeleton: var(--gray-100);
+  /* 혼잡도 */
+  --congestion-free: var(--green-100);
+  --congestion-free-hover: var(--green-200);
+  --congestion-free-stroke: var(--green-400);
+  --congestion-normal: var(--yellow-100);
+  --congestion-normal-hover: var(--yellow-200);
+  --congestion-normal-stroke: var(--yellow-500);
+  --congestion-busyish: var(--orange-200);
+  --congestion-busyish-hover: var(--orange-300);
+  --congestion-busyish-stroke: var(--orange-500);
+  --congestion-busy: var(--red-200);
+  --congestion-busy-hover: var(--red-300);
+  --congestion-busy-stroke: var(--red-500);
+  --congestion-none: var(--neutral-200);
+  /* 지도 */
+  --map-outside: var(--gray-100);
+  --map-outside-line: var(--gray-300);
+  --map-line: var(--gray-400);
+  --map-wall: var(--gray-150);
+  --map-empty: var(--gray-25);
+  --map-zoom-face: var(--gray-150);
+  --map-zoom-wall: var(--gray-250);
+  --map-zoom-edge: var(--gray-500);
+  --map-river: var(--blue-100);
+  --map-river-outside: var(--blue-50);
+  --map-river-label: var(--blue-500);
+  /* 모양 */
+  --radius: 6px;
+
+  /* shadcn 기본값 (tokens.md에 없음) */
+  --popover-foreground: oklch(0.145 0 0);
+  --secondary: oklch(0.97 0 0);
+  --secondary-foreground: oklch(0.205 0 0);
+  --accent-foreground: oklch(0.205 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
