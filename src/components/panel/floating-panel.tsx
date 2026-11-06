@@ -18,7 +18,7 @@ export default function FloatingPanel() {
   return (
     <aside className="absolute top-5 right-5 bottom-5 flex w-85 flex-col gap-4 overflow-auto rounded-lg border border-border-soft bg-card p-5 shadow-panel">
       <h2 className="text-lg font-bold">서울 전체</h2>
-      <div>{message}</div>
+      <div className="flex flex-1">{message}</div>
     </aside>
   );
 }
