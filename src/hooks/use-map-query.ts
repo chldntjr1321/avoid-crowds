@@ -1,3 +1,4 @@
+import { getValidMapQuery } from '@/lib/map-query';
 import { useSearchParams } from 'next/navigation';
 
 export default function useMapQuery() {
@@ -5,5 +6,7 @@ export default function useMapQuery() {
   const gu = searchParams.get('gu');
   const place = searchParams.get('place');
 
-  return { gu, place };
+  const validQuery = getValidMapQuery({ gu, place });
+
+  return validQuery;
 }
