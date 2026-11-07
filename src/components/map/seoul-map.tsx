@@ -9,6 +9,7 @@ import placeList from '@/data/generated/places.json';
 import { useRouter } from 'next/navigation';
 import { getMapHref } from '@/lib/map-query';
 import { cn } from '@/lib/utils';
+import useMapQuery from '@/hooks/use-map-query';
 
 const LEVEL_COLOR: Record<CongestLevel, string> = {
   여유: 'fill-congestion-free',
@@ -17,6 +18,7 @@ const LEVEL_COLOR: Record<CongestLevel, string> = {
   붐빔: 'fill-congestion-busy',
 };
 const seoulGrandPark = placeList.find((place) => place.code === 'POI100');
+const SEOUL_VIEW_BOX = `0 0 1000 1000`;
 
 function getFillColor(
   guLevels: Record<string, CongestLevel> | undefined,
@@ -31,18 +33,44 @@ function getFillColor(
   return fillColor;
 }
 
+function getViewBox(gu: string | null): string {
+  if (!gu) {
+    return SEOUL_VIEW_BOX;
+  }
+  const targetGu = districts.find((district) => district.name === gu);
+  if (!targetGu) {
+    return SEOUL_VIEW_BOX;
+  }
+  const [[left, top], [right, bottom]] = targetGu.bbox;
+  const width = right - left;
+  const height = bottom - top;
+  const pad = Math.max(width, height) * 0.3; // 자치구 및 장소 선택 시 여백 크기
+
+  return `${left - pad} ${top - pad} ${width + pad * 2} ${height + pad * 2}`;
+}
+
 export default function SeoulMap() {
   const router = useRouter();
   const { data } = usePlaces();
+  const { gu } = useMapQuery();
 
   const guLevels = data ? getGuLevels(data) : undefined;
+  const selectedGu = districts.find((district) => district.name === gu);
 
   return (
-    <svg viewBox="0 0 1000 1000" className="h-screen w-full">
+    <svg viewBox={getViewBox(gu)} className="h-screen w-[calc(100%-360px)]">
       {districts.map((district) => {
-        const fillColor = getFillColor(guLevels, district.name);
         const isClickable = Boolean(guLevels?.[district.name]);
+        const isSelected = gu === district.name;
+        if (isSelected) {
+          return null;
+        }
+        const isFaded = Boolean(gu && !isSelected);
         const href = getMapHref({ gu: district.name, place: null });
+        const fillColor = isFaded
+          ? 'fill-map-outside'
+          : getFillColor(guLevels, district.name);
+
         return (
           <path
             key={district.name}
@@ -51,11 +79,17 @@ export default function SeoulMap() {
             className={cn(
               fillColor,
               isClickable && 'cursor-pointer',
-              'stroke-map-line',
+              isFaded ? 'stroke-map-outside-line' : 'stroke-map-line',
             )}
           />
         );
       })}
+      {selectedGu && (
+        <path
+          d={selectedGu.d}
+          className={`${getFillColor(guLevels, selectedGu.name)} stroke-map-line`}
+        />
+      )}
       {seoulGrandPark && (
         <path
           d={seoulGrandPark.d}
