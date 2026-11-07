@@ -56,9 +56,18 @@ export default function SeoulMap() {
 
   const guLevels = data ? getGuLevels(data) : undefined;
   const selectedGu = districts.find((district) => district.name === gu);
+  const selectedGuPlaces = placeList.filter((p) => p.guName === gu);
 
   return (
     <svg viewBox={getViewBox(gu)} className="h-screen w-[calc(100%-360px)]">
+      {/* 선택한 자치구 모양대로 자르기 위한 틀 등록 */}
+      <defs>
+        <clipPath id="selected-gu-clip">
+          {selectedGu && <path d={selectedGu.d} />}
+        </clipPath>
+      </defs>
+
+      {/* 서울 전체 그리기 + 선택하지 않은 지역 처리 로직 */}
       {districts.map((district) => {
         const isSelected = gu === district.name;
         if (isSelected) {
@@ -86,12 +95,39 @@ export default function SeoulMap() {
           />
         );
       })}
+
+      {/* 선택한 자치구 그리기 */}
       {selectedGu && (
         <path
           d={selectedGu.d}
           className={`${getFillColor(guLevels, selectedGu.name)} stroke-map-line`}
         />
       )}
+
+      {/* 선택한 자치구 내의 장소 그리기 (자치구를 넘어가는 부분은 자름) */}
+      <g clipPath="url(#selected-gu-clip)">
+        {selectedGuPlaces.map((p) => {
+          const targetPlace = data?.find((d) => d.code === p.code);
+
+          return (
+            <path
+              key={p.code}
+              d={p.d}
+              className={cn(
+                targetPlace
+                  ? LEVEL_COLOR[targetPlace.level]
+                  : 'fill-congestion-none',
+                'stroke-map-line',
+              )}
+            />
+          );
+        })}
+      </g>
+      {/* 장소에 덮여 얇아진 자치구 경계선을 맨 위에 다시 그리기 */}
+      {selectedGu && (
+        <path d={selectedGu.d} fill="none" className="stroke-map-line" />
+      )}
+
       {seoulGrandPark && (
         <path
           d={seoulGrandPark.d}
