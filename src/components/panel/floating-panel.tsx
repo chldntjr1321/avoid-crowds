@@ -3,24 +3,32 @@
 import usePlaces from '@/hooks/use-places';
 import ErrorState from '@/components/panel/error-state';
 import useMapQuery from '@/hooks/use-map-query';
+import PlaceList from '@/components/panel/place-list';
+import { sortByMostCrowded } from '@/lib/congestion';
 
 export default function FloatingPanel() {
   const { data, errorUpdateCount, isFetching, refetch } = usePlaces();
   const { gu } = useMapQuery();
 
-  let message: React.ReactNode;
+  let content: React.ReactNode;
   if (data) {
-    message = null; // 추후에 TOP5 표시 예정
+    if (gu) {
+      const selectedGuPlaces = data.filter((d) => d.guName === gu);
+      const sortedGuPlaces = sortByMostCrowded(selectedGuPlaces);
+      content = <PlaceList places={sortedGuPlaces} />;
+    } else {
+      content = null;
+    }
   } else if (errorUpdateCount > 0) {
-    message = <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />;
+    content = <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />;
   } else {
-    message = '불러오는 중';
+    content = '불러오는 중';
   }
 
   return (
     <aside className="absolute top-5 right-5 bottom-5 flex w-85 flex-col gap-4 overflow-auto rounded-lg border border-border-soft bg-card p-5 shadow-panel">
       <h2 className="text-lg font-bold">{gu ?? '서울 전체'}</h2>
-      <div className="flex flex-1">{message}</div>
+      <div className="flex flex-1">{content}</div>
     </aside>
   );
 }

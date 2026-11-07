@@ -41,3 +41,14 @@ export function getGuLevels(places: Place[]): Record<string, CongestLevel> {
   }
   return averageGroups;
 }
+
+export function sortByMostCrowded(places: Place[]): Place[] {
+  return [...places].sort((a, b) => {
+    const scoreA = levelToScore(a.level);
+    const scoreB = levelToScore(b.level);
+
+    return scoreB - scoreA
+      ? scoreB - scoreA
+      : b.population.max - a.population.max;
+  });
+}
