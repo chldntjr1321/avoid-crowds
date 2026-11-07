@@ -6,6 +6,9 @@ import usePlaces from '@/hooks/use-places';
 import { getGuLevels } from '@/lib/congestion';
 import type { CongestLevel } from '@/lib/place';
 import placeList from '@/data/generated/places.json';
+import { useRouter } from 'next/navigation';
+import { getMapHref } from '@/lib/map-query';
+import { cn } from '@/lib/utils';
 
 const LEVEL_COLOR: Record<CongestLevel, string> = {
   여유: 'fill-congestion-free',
@@ -29,6 +32,7 @@ function getFillColor(
 }
 
 export default function SeoulMap() {
+  const router = useRouter();
   const { data } = usePlaces();
 
   const guLevels = data ? getGuLevels(data) : undefined;
@@ -37,11 +41,18 @@ export default function SeoulMap() {
     <svg viewBox="0 0 1000 1000" className="h-screen w-full">
       {districts.map((district) => {
         const fillColor = getFillColor(guLevels, district.name);
+        const isClickable = Boolean(guLevels?.[district.name]);
+        const href = getMapHref({ gu: district.name, place: null });
         return (
           <path
             key={district.name}
             d={district.d}
-            className={`${fillColor} stroke-map-line`}
+            onClick={isClickable ? () => router.push(href) : undefined}
+            className={cn(
+              fillColor,
+              isClickable && 'cursor-pointer',
+              'stroke-map-line',
+            )}
           />
         );
       })}

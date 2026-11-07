@@ -1,4 +1,4 @@
-import { getValidMapQuery } from '@/lib/map-query';
+import { getMapHref, getValidMapQuery } from '@/lib/map-query';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 
@@ -17,17 +17,8 @@ export default function useMapQuery() {
       return;
     }
 
-    const params = new URLSearchParams();
+    const href = getMapHref({ gu: validQuery.gu, place: validQuery.place });
 
-    if (validQuery.gu) {
-      params.set('gu', validQuery.gu);
-    }
-    if (validQuery.place) {
-      params.set('place', validQuery.place);
-    }
-
-    const queryString = params.toString();
-    const href = queryString ? `/?${queryString}` : '/';
     router.replace(href);
   }, [isInvalid, validQuery.gu, validQuery.place, router]);
 

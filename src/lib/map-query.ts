@@ -1,7 +1,7 @@
 import districts from '@/data/generated/districts.json';
 import placeList from '@/data/generated/places.json';
 
-interface MapQuery {
+export interface MapQuery {
   gu: string | null;
   place: string | null;
 }
@@ -22,4 +22,17 @@ export function getValidMapQuery({ gu, place }: MapQuery): MapQuery {
   }
 
   return { gu, place };
+}
+
+export function getMapHref({ gu, place }: MapQuery): string {
+  const params = new URLSearchParams();
+  if (gu) {
+    params.set('gu', gu);
+  }
+  if (place) {
+    params.set('place', place);
+  }
+  const queryString = params.toString();
+
+  return queryString ? `/?${queryString}` : '/';
 }
