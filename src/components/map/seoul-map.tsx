@@ -60,16 +60,18 @@ export default function SeoulMap() {
   return (
     <svg viewBox={getViewBox(gu)} className="h-screen w-[calc(100%-360px)]">
       {districts.map((district) => {
-        const isClickable = Boolean(guLevels?.[district.name]);
         const isSelected = gu === district.name;
         if (isSelected) {
           return null;
         }
         const isFaded = Boolean(gu && !isSelected);
-        const href = getMapHref({ gu: district.name, place: null });
+        const href = isFaded
+          ? getMapHref({ gu: null, place: null }) // 서울 전체로
+          : getMapHref({ gu: district.name, place: null }); // 선택한 자치구로
         const fillColor = isFaded
           ? 'fill-map-outside'
           : getFillColor(guLevels, district.name);
+        const isClickable = Boolean(guLevels?.[district.name] || isFaded);
 
         return (
           <path
