@@ -51,6 +51,7 @@ export default function FloatingPanel() {
 
   return (
     <aside className="absolute top-5 right-5 bottom-5 flex w-85 flex-col gap-4 overflow-auto rounded-lg border border-border-soft bg-card p-5 shadow-panel">
+      {/* 뒤로 가기 버튼 */}
       {gu && (
         <Button
           variant="outline"
@@ -63,7 +64,11 @@ export default function FloatingPanel() {
           </Link>
         </Button>
       )}
-      {panelTitle && <h2 className="text-lg font-bold">{panelTitle}</h2>}
+      {panelTitle && (
+        <h2 className={gu ? 'text-xl font-extrabold' : 'text-lg font-bold'}>
+          {panelTitle}
+        </h2>
+      )}
       <div className="flex flex-1">{content}</div>
     </aside>
   );
