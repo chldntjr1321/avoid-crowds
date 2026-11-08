@@ -108,16 +108,19 @@ export default function SeoulMap() {
       <g clipPath="url(#selected-gu-clip)">
         {selectedGuPlaces.map((p) => {
           const targetPlace = data?.find((d) => d.code === p.code);
+          const href = getMapHref({ gu, place: p.code });
 
           return (
             <path
               key={p.code}
               d={p.d}
+              onClick={() => router.push(href)}
               className={cn(
                 targetPlace
                   ? LEVEL_COLOR[targetPlace.level]
                   : 'fill-congestion-none',
                 'stroke-map-line',
+                'cursor-pointer',
               )}
             />
           );
@@ -128,6 +131,7 @@ export default function SeoulMap() {
         <path d={selectedGu.d} fill="none" className="stroke-map-line" />
       )}
 
+      {/* 서울대공원 그리기 */}
       {seoulGrandPark && (
         <path
           d={seoulGrandPark.d}
