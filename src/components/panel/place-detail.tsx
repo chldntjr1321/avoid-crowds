@@ -7,7 +7,7 @@ interface PlaceDetailProps {
 export default function PlaceDetail({ place }: PlaceDetailProps) {
   return (
     <div className="flex flex-1 flex-row justify-between">
-      <p>{place.name}</p>
+      <h2>{place.name}</h2>
       <p>{place.level}</p>
     </div>
   );

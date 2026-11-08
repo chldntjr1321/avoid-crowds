@@ -9,12 +9,14 @@ import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import PlaceDetail from '@/components/panel/place-detail';
+import { getMapHref } from '@/lib/map-query';
 
 export default function FloatingPanel() {
   const { data, errorUpdateCount, isFetching, refetch } = usePlaces();
   const { gu, place } = useMapQuery();
-
+  const selectedPlace = data?.find((d) => d.code === place);
   let content: React.ReactNode;
+
   if (!data) {
     content =
       errorUpdateCount > 0 ? (
@@ -26,7 +28,6 @@ export default function FloatingPanel() {
       );
   } else if (place) {
     // getValidMapQuery를 통과한 place는 항상 gu가 있음
-    const selectedPlace = data.find((d) => d.code === place);
     content = selectedPlace ? (
       <PlaceDetail place={selectedPlace} />
     ) : (
@@ -42,6 +43,12 @@ export default function FloatingPanel() {
     content = null;
   }
 
+  const backHref = place
+    ? getMapHref({ gu, place: null })
+    : getMapHref({ gu: null, place: null });
+  const backLabel = place ? `${gu} 장소 목록` : '서울 전체';
+  const panelTitle = place ? '' : (gu ?? '서울 전체');
+
   return (
     <aside className="absolute top-5 right-5 bottom-5 flex w-85 flex-col gap-4 overflow-auto rounded-lg border border-border-soft bg-card p-5 shadow-panel">
       {gu && (
@@ -50,13 +57,13 @@ export default function FloatingPanel() {
           className="self-start rounded-sm border-input bg-surface-white px-2.5 py-1.5 text-[13px]"
           asChild
         >
-          <Link href="/">
+          <Link href={backHref}>
             <ArrowLeft />
-            <span>서울 전체</span>
+            <span>{backLabel}</span>
           </Link>
         </Button>
       )}
-      <h2 className="text-lg font-bold">{gu ?? '서울 전체'}</h2>
+      {panelTitle && <h2 className="text-lg font-bold">{panelTitle}</h2>}
       <div className="flex flex-1">{content}</div>
     </aside>
   );
