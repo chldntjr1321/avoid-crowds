@@ -8,24 +8,38 @@ import { sortByMostCrowded } from '@/lib/congestion';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
+import PlaceDetail from '@/components/panel/place-detail';
 
 export default function FloatingPanel() {
   const { data, errorUpdateCount, isFetching, refetch } = usePlaces();
-  const { gu } = useMapQuery();
+  const { gu, place } = useMapQuery();
 
   let content: React.ReactNode;
-  if (data) {
-    if (gu) {
-      const selectedGuPlaces = data.filter((d) => d.guName === gu);
-      const sortedGuPlaces = sortByMostCrowded(selectedGuPlaces);
-      content = <PlaceList places={sortedGuPlaces} />;
-    } else {
-      content = null;
-    }
-  } else if (errorUpdateCount > 0) {
-    content = <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />;
+  if (!data) {
+    content =
+      errorUpdateCount > 0 ? (
+        <ErrorState onRetry={() => refetch()} isRetrying={isFetching} />
+      ) : (
+        <p className="text-[13px] text-text-secondary" role="status">
+          불러오는 중
+        </p>
+      );
+  } else if (place) {
+    // getValidMapQuery를 통과한 place는 항상 gu가 있음
+    const selectedPlace = data.find((d) => d.code === place);
+    content = selectedPlace ? (
+      <PlaceDetail place={selectedPlace} />
+    ) : (
+      <p className="text-[13px] text-text-secondary" role="alert">
+        정보를 불러오지 못했어요
+      </p>
+    );
+  } else if (gu) {
+    const selectedGuPlaces = data.filter((d) => d.guName === gu);
+    const sortedGuPlaces = sortByMostCrowded(selectedGuPlaces);
+    content = <PlaceList places={sortedGuPlaces} />;
   } else {
-    content = '불러오는 중';
+    content = null;
   }
 
   return (
