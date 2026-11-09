@@ -17,6 +17,12 @@ const LEVEL_COLOR: Record<CongestLevel, string> = {
   '약간 붐빔': 'fill-congestion-busyish',
   붐빔: 'fill-congestion-busy',
 };
+const LEVEL_HOVER_COLOR: Record<CongestLevel, string> = {
+  여유: 'hover:fill-congestion-free-hover',
+  보통: 'hover:fill-congestion-normal-hover',
+  '약간 붐빔': 'hover:fill-congestion-busyish-hover',
+  붐빔: 'hover:fill-congestion-busy-hover',
+};
 const seoulGrandPark = placeList.find(
   (place) => place.code === SEOUL_GRAND_PARK_CODE,
 );
@@ -54,11 +60,12 @@ function getViewBox(gu: string | null): string {
 export default function SeoulMap() {
   const router = useRouter();
   const { data } = usePlaces();
-  const { gu } = useMapQuery();
+  const { gu, place } = useMapQuery();
 
   const guLevels = data ? getGuLevels(data) : undefined;
   const selectedGu = districts.find((district) => district.name === gu);
   const selectedGuPlaces = placeList.filter((p) => p.guName === gu);
+  const selectedPlace = selectedGuPlaces.find((p) => p.code === place);
 
   return (
     <svg viewBox={getViewBox(gu)} className="h-screen w-[calc(100%-360px)]">
@@ -99,12 +106,7 @@ export default function SeoulMap() {
       })}
 
       {/* 선택한 자치구 그리기 */}
-      {selectedGu && (
-        <path
-          d={selectedGu.d}
-          className={`${getFillColor(guLevels, selectedGu.name)} stroke-map-line`}
-        />
-      )}
+      {selectedGu && <path d={selectedGu.d} className={'fill-map-zoom-wall'} />}
 
       {/* 선택한 자치구 내의 장소 그리기 (자치구를 넘어가는 부분은 자름) */}
       <g clipPath="url(#selected-gu-clip)">
@@ -121,6 +123,7 @@ export default function SeoulMap() {
                 targetPlace
                   ? LEVEL_COLOR[targetPlace.level]
                   : 'fill-congestion-none',
+                targetPlace && LEVEL_HOVER_COLOR[targetPlace.level],
                 'stroke-map-line',
                 'cursor-pointer',
               )}
@@ -133,6 +136,18 @@ export default function SeoulMap() {
         <path d={selectedGu.d} fill="none" className="stroke-map-line" />
       )}
 
+      {/* 선택한 장소 테두리 (옆 장소·경계선에 가리지 않게 맨 위에) */}
+      {selectedPlace && (
+        <g clipPath="url(#selected-gu-clip)">
+          <path
+            d={selectedPlace.d}
+            className="stroke-selected"
+            fill="none"
+            strokeWidth={2}
+          />
+        </g>
+      )}
+
       {/* 서울대공원 그리기 */}
       {seoulGrandPark && (
         <path
@@ -143,8 +158,10 @@ export default function SeoulMap() {
           className={cn(
             getFillColor(guLevels, seoulGrandPark.guName),
             'stroke-map-line',
+            place === SEOUL_GRAND_PARK_CODE && 'stroke-selected',
             'cursor-pointer',
           )}
+          strokeWidth={place === SEOUL_GRAND_PARK_CODE ? 2 : undefined}
         />
       )}
 
