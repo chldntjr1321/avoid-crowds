@@ -86,16 +86,21 @@ export function formatPopulation({ min, max }: PopulationRange): string {
   return `약 ${formattedMin}~${formattedMax}만명`;
 }
 
+// 시각 변환 함수 ('2026-11-10 03:00' → '3시')
+export function formatHour(time: string): string {
+  const splitTime = time.split(' ')[1];
+  return `${Number(splitTime.split(':')[0])}시`;
+}
+
 // 시각 변환 함수 (2026-11-09 02:00 형태의 시각을 대상으로)
 export function formatTime(currentTime: string, targetTime: string): string {
   let timeText = '';
   if (targetTime.split(' ')[0] !== currentTime.split(' ')[0]) {
     timeText += '내일 ';
   }
-  const splitTime = targetTime.split(' ')[1];
-  timeText += Number(splitTime.split(':')[0]);
+  const formattedTime = formatHour(targetTime);
 
-  return `${timeText}시`;
+  return `${timeText}${formattedTime}`;
 }
 
 // 예측 요약 문장을 반환해주는 함수
