@@ -7,7 +7,7 @@ import { getGuLevels } from '@/lib/congestion';
 import type { CongestLevel } from '@/lib/place';
 import placeList from '@/data/generated/places.json';
 import { useRouter } from 'next/navigation';
-import { getMapHref } from '@/lib/map-query';
+import { getMapHref, SEOUL_GRAND_PARK_CODE } from '@/lib/map-query';
 import { cn } from '@/lib/utils';
 import useMapQuery from '@/hooks/use-map-query';
 
@@ -17,7 +17,9 @@ const LEVEL_COLOR: Record<CongestLevel, string> = {
   '약간 붐빔': 'fill-congestion-busyish',
   붐빔: 'fill-congestion-busy',
 };
-const seoulGrandPark = placeList.find((place) => place.code === 'POI100');
+const seoulGrandPark = placeList.find(
+  (place) => place.code === SEOUL_GRAND_PARK_CODE,
+);
 const SEOUL_VIEW_BOX = `0 0 1000 1000`;
 
 function getFillColor(
@@ -135,7 +137,14 @@ export default function SeoulMap() {
       {seoulGrandPark && (
         <path
           d={seoulGrandPark.d}
-          className={`${getFillColor(guLevels, seoulGrandPark.guName)} stroke-map-line`}
+          onClick={() =>
+            router.push(getMapHref({ gu: null, place: SEOUL_GRAND_PARK_CODE }))
+          }
+          className={cn(
+            getFillColor(guLevels, seoulGrandPark.guName),
+            'stroke-map-line',
+            'cursor-pointer',
+          )}
         />
       )}
 

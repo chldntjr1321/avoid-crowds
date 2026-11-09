@@ -46,13 +46,13 @@ export default function FloatingPanel() {
   const backHref = place
     ? getMapHref({ gu, place: null })
     : getMapHref({ gu: null, place: null });
-  const backLabel = place ? `${gu} 장소 목록` : '서울 전체';
+  const backLabel = gu && place ? `${gu} 장소 목록` : '서울 전체';
   const panelTitle = place ? '' : (gu ?? '서울 전체');
 
   return (
     <aside className="absolute top-5 right-5 bottom-5 flex w-85 flex-col gap-4 overflow-auto rounded-lg border border-border-soft bg-card p-5 shadow-panel">
       {/* 뒤로 가기 버튼 */}
-      {gu && (
+      {(gu || place) && (
         <Button
           variant="outline"
           className="self-start rounded-sm border-input bg-surface-white px-2.5 py-1.5 text-[13px]"
