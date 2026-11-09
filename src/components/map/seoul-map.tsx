@@ -74,6 +74,10 @@ export default function SeoulMap() {
         <clipPath id="selected-gu-clip">
           {selectedGu && <path d={selectedGu.d} />}
         </clipPath>
+        {/* 선택한 장소 모양대로 자르기 위한 틀 (장소 안쪽의 자치구 경계선만 남길 때 씀) */}
+        <clipPath id="selected-place-clip">
+          {selectedPlace && <path d={selectedPlace.d} />}
+        </clipPath>
       </defs>
 
       {/* 서울 전체 그리기 + 선택하지 않은 지역 처리 로직 */}
@@ -136,16 +140,29 @@ export default function SeoulMap() {
         <path d={selectedGu.d} fill="none" className="stroke-map-line" />
       )}
 
-      {/* 선택한 장소 테두리 (옆 장소·경계선에 가리지 않게 맨 위에) */}
-      {selectedPlace && (
-        <g clipPath="url(#selected-gu-clip)">
-          <path
-            d={selectedPlace.d}
-            className="stroke-selected"
-            fill="none"
-            strokeWidth={2}
-          />
-        </g>
+      {/* 선택한 장소 테두리 (옆 장소·경계선에 가리지 않게 맨 위에)
+          보이는 모양은 "장소 ∩ 자치구"라서 테두리도 두 조각을 합쳐 그림 */}
+      {selectedPlace && selectedGu && (
+        <>
+          {/* ① 장소 경계 중 자치구 안에 있는 부분 */}
+          <g clipPath="url(#selected-gu-clip)">
+            <path
+              d={selectedPlace.d}
+              className="stroke-selected"
+              fill="none"
+              strokeWidth={2}
+            />
+          </g>
+          {/* ② 자치구 경계 중 장소 안에 있는 부분 (장소가 자치구 밖으로 나간 쪽) */}
+          <g clipPath="url(#selected-place-clip)">
+            <path
+              d={selectedGu.d}
+              className="stroke-selected"
+              fill="none"
+              strokeWidth={2}
+            />
+          </g>
+        </>
       )}
 
       {/* 서울대공원 그리기 */}
