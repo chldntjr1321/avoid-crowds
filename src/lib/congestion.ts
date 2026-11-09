@@ -3,6 +3,7 @@ import {
   type PopulationRange,
   type CongestLevel,
   type Place,
+  type Forecast,
 } from '@/lib/place';
 
 // '여유','붐빔' 등의 혼잡도를 인덱스를 활용해 숫자(score)로 변환하는 함수
@@ -83,4 +84,30 @@ export function formatPopulation({ min, max }: PopulationRange): string {
   const formattedMax = (max / 10000).toFixed(1);
 
   return `약 ${formattedMin}~${formattedMax}만명`;
+}
+
+// 시각 변환 함수 (2026-11-09 02:00 형태의 시각을 대상으로)
+export function formatTime(currentTime: string, targetTime: string): string {
+  let timeText = '';
+  if (targetTime.split(' ')[0] !== currentTime.split(' ')[0]) {
+    timeText += '내일 ';
+  }
+  const splitTime = targetTime.split(' ')[1];
+  timeText += Number(splitTime.split(':')[0]);
+
+  return `${timeText}시`;
+}
+
+// 예측 요약 문장을 반환해주는 함수
+export function getForecastSummary(forecastData: Forecast[]): string {
+  const current = forecastData[0];
+  const changedForecast = forecastData.find((d) => d.level !== current.level);
+  if (!changedForecast) {
+    return '당분간은 지금과 비슷해요';
+  }
+  if (levelToScore(current.level) > levelToScore(changedForecast.level)) {
+    return `${formatTime(current.time, changedForecast.time)}부터 한산해져요`;
+  }
+
+  return `${formatTime(current.time, changedForecast.time)}부터 혼잡해져요`;
 }

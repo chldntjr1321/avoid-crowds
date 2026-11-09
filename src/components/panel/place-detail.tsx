@@ -1,6 +1,7 @@
 import type { Place } from '@/lib/place';
 import { Badge } from '@/components/ui/badge';
 import { getBadgeVariant, formatPopulation } from '@/lib/congestion';
+import ForecastCard from '@/components/panel/forecast-card';
 
 interface PlaceDetailProps {
   place: Place;
@@ -33,6 +34,7 @@ export default function PlaceDetail({ place }: PlaceDetailProps) {
         <span className="text-[11px] text-text-faint">서울시 안내 문구</span>
         <p>{place.message}</p>
       </div>
+      <ForecastCard place={place} />
     </div>
   );
 }
