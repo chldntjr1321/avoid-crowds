@@ -67,6 +67,14 @@ const LEVEL_BADGE_VARIANT: Record<CongestLevel, BadgeVariant> = {
   붐빔: 'busy',
 };
 
+// 혼잡도 단계 -> 예측 요약 문구
+const LEVEL_SUMMARY_TEXT: Record<CongestLevel, string> = {
+  여유: '한산해요',
+  보통: '사람이 조금 있어요',
+  '약간 붐빔': '약간 붐벼요',
+  붐빔: '붐벼요',
+};
+
 // 혼잡도 단계 -> Badge variant 이름 변환 함수
 export function getBadgeVariant(level: CongestLevel): BadgeVariant {
   return LEVEL_BADGE_VARIANT[level];
@@ -105,14 +113,22 @@ export function formatTime(currentTime: string, targetTime: string): string {
 
 // 예측 요약 문장을 반환해주는 함수
 export function getForecastSummary(forecastData: Forecast[]): string {
-  const current = forecastData[0];
-  const changedForecast = forecastData.find((d) => d.level !== current.level);
+  const currentScore = levelToScore(forecastData[0].level);
+  const currentTime = forecastData[0].time;
+  // 지금보다 붐비면 1, 같으면 0, 한산하면 -1
+  const getDirection = (level: CongestLevel) =>
+    Math.sign(levelToScore(level) - currentScore);
+
+  // 지금과 방향이 다르고, 다음 칸도 같은 방향인(2시간 이상 이어지는) 첫 칸
+  const changedForecast = forecastData.find((d, i) => {
+    const next = forecastData[i + 1];
+    if (!next) return false; // 마지막 칸은 이어지는지 확인할 수 없어서 제외
+    const direction = getDirection(d.level);
+    return direction !== 0 && getDirection(next.level) === direction;
+  });
   if (!changedForecast) {
     return '당분간은 지금과 비슷해요';
   }
-  if (levelToScore(current.level) > levelToScore(changedForecast.level)) {
-    return `${formatTime(current.time, changedForecast.time)}부터 한산해져요`;
-  }
 
-  return `${formatTime(current.time, changedForecast.time)}부터 혼잡해져요`;
+  return `${formatTime(currentTime, changedForecast.time)}에 ${LEVEL_SUMMARY_TEXT[changedForecast.level]}`;
 }
