@@ -14,15 +14,15 @@
 
 ## 기술 스택
 
-| 항목          | 사용                                                                      |
-| ------------- | ------------------------------------------------------------------------- |
-| 프레임워크    | Next.js 16 (App Router, Cache Components)                                 |
-| 언어          | TypeScript                                                                |
-| 스타일        | Tailwind CSS v4, shadcn/ui                                                |
-| 서버 데이터   | TanStack Query (5분마다 다시 불러오기)                                    |
-| 차트          | Recharts                                                                  |
-| 지도          | SVG (빌드 스크립트에서 d3-geo, mapshaper로 경계 데이터를 SVG path로 변환) |
-| 패키지 매니저 | pnpm                                                                      |
+| 항목          | 사용                                      |
+| ------------- | ----------------------------------------- |
+| 프레임워크    | Next.js 16 (App Router, Cache Components) |
+| 언어          | TypeScript                                |
+| 스타일        | Tailwind CSS v4, shadcn/ui                |
+| 서버 데이터   | TanStack Query                            |
+| 차트          | Recharts                                  |
+| 지도          | SVG, d3-geo, mapshaper                    |
+| 패키지 매니저 | pnpm                                      |
 
 서울시 API는 Route Handler(`/api/places`)에서만 호출합니다. 121곳을 한 번에 모아 5분 동안 캐싱하고, 인증키는 서버 환경변수에만 둡니다.
 
@@ -73,7 +73,7 @@ pnpm dev
 
 원본 데이터 설명은 [`data/raw/README.md`](data/raw/README.md)에 있습니다.
 
-## 한계
+## 참고 사항
 
 - 서울시가 제공하는 **주요 121장소**만 볼 수 있습니다. 그중 서울대공원은 과천시에 있어서 자치구 없이 따로 표시합니다.
 - 예측은 **12시간까지**만 있어서, 며칠 뒤 계획보다는 "오늘 어디로 갈지" 정하는 용도입니다.
