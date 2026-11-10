@@ -28,6 +28,15 @@ const seoulGrandPark = placeList.find(
 );
 const SEOUL_VIEW_BOX = `0 0 1000 1000`;
 
+const AMOUNT_OF_GU = 25;
+const SHUFFLE_STEP = 7;
+const MAX_FILL_DELAY_MS = 400;
+
+function getDelayTime(index: number) {
+  const order = (index * SHUFFLE_STEP) % AMOUNT_OF_GU;
+  return order * (MAX_FILL_DELAY_MS / (AMOUNT_OF_GU - 1));
+}
+
 function getFillColor(
   guLevels: Record<string, CongestLevel> | undefined,
   guName: string,
@@ -81,7 +90,7 @@ export default function SeoulMap() {
       </defs>
 
       {/* 서울 전체 그리기 + 선택하지 않은 지역 처리 로직 */}
-      {districts.map((district) => {
+      {districts.map((district, index) => {
         const isSelected = gu === district.name;
         if (isSelected) {
           return null;
@@ -94,16 +103,21 @@ export default function SeoulMap() {
           ? 'fill-map-outside'
           : getFillColor(guLevels, district.name);
         const isClickable = Boolean(guLevels?.[district.name] || isFaded);
+        const delay = getDelayTime(index);
 
         return (
           <path
             key={district.name}
             d={district.d}
             onClick={isClickable ? () => router.push(href) : undefined}
+            style={{ transitionDelay: `${gu ? 0 : delay}ms` }}
             className={cn(
               fillColor,
               isClickable && 'cursor-pointer',
               isFaded ? 'stroke-map-outside-line' : 'stroke-map-line',
+              'transition-colors',
+              'duration-600',
+              'motion-reduce:transition-none',
             )}
           />
         );
@@ -169,6 +183,7 @@ export default function SeoulMap() {
       {seoulGrandPark && (
         <path
           d={seoulGrandPark.d}
+          style={{ transitionDelay: `${gu ? 0 : MAX_FILL_DELAY_MS}ms` }}
           onClick={() =>
             router.push(getMapHref({ gu: null, place: SEOUL_GRAND_PARK_CODE }))
           }
@@ -176,6 +191,9 @@ export default function SeoulMap() {
             getFillColor(guLevels, seoulGrandPark.guName),
             'stroke-map-line',
             place === SEOUL_GRAND_PARK_CODE && 'stroke-selected',
+            'transition-[fill]',
+            'duration-600',
+            'motion-reduce:transition-none',
             'cursor-pointer',
           )}
           strokeWidth={place === SEOUL_GRAND_PARK_CODE ? 2 : undefined}
